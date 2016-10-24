@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.example.mrugas.example.R;
 import com.example.mrugas.example.activities.DetailsActivity;
 import com.example.mrugas.example.models.DailyMotionUser;
-import com.example.mrugas.example.models.DailyMotionUsersList;
 import com.example.mrugas.example.models.GitHubUser;
 import com.example.mrugas.example.models.User;
 
@@ -25,7 +24,11 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.example.mrugas.example.activities.DetailsActivity.DAILYMOTION;
+import static com.example.mrugas.example.activities.DetailsActivity.GITHUB;
+import static com.example.mrugas.example.activities.DetailsActivity.TYPE;
+import static com.example.mrugas.example.activities.DetailsActivity.USER;
 
 /**
  * Created by mruga on 24.10.2016.
@@ -34,9 +37,8 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
     private Context mContext;
-    private List<GitHubUser> gitHubUsers = new ArrayList<>();
-    private List<DailyMotionUser> dailyMotionUsersList = new ArrayList<>();
-
+    private List<? extends User> firstList = new ArrayList<>();
+    private List<? extends User> secondList = new ArrayList<>();
     public UserAdapter(Context mContext) {
         this.mContext = mContext;
     }
@@ -51,7 +53,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
-        final User user = (gitHubUsers.size()>0 && position<gitHubUsers.size())? gitHubUsers.get(position) : dailyMotionUsersList.get(position-gitHubUsers.size());
+        final User user = (firstList.size()>0 && position< firstList.size())? firstList.get(position) : secondList.get(position- firstList.size());
         holder.tvLogin.setText(user.getUsername());
         Glide.with(mContext).load(user.getAvatarUrl()).into(holder.ivAvatar);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +61,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, DetailsActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("User", user.getUsername());
+                intent.putExtra(USER, user.getUsername());
+                if(user instanceof GitHubUser)
+                    intent.putExtra(TYPE, GITHUB);
+                else
+                    intent.putExtra(TYPE,DAILYMOTION);
                 mContext.startActivity(intent);
             }
         });
@@ -73,19 +79,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public int getItemCount() {
-        return gitHubUsers.size()+dailyMotionUsersList.size();
+        return firstList.size()+ secondList.size();
     }
-    public void addGitHubUsers(List<GitHubUser> usersList){
-        this.gitHubUsers = usersList;
+    public void addUsers(List<? extends User> usersList){
+        if(firstList.isEmpty())
+            firstList = usersList;
+        else
+            secondList = usersList;
         notifyDataSetChanged();
     }
 
-    public void addDailyMotionUsers(List<DailyMotionUser> usersList){
-        this.dailyMotionUsersList = usersList;
-        notifyDataSetChanged();
+    public void clear() {
+        firstList.clear();
+        secondList.clear();
     }
 
-    public class UserViewHolder extends RecyclerView.ViewHolder {
+    class UserViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_login)
         TextView tvLogin;
         @BindView(R.id.iv_avatar)
@@ -93,7 +102,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         @BindView(R.id.card_view)
         CardView cardView;
 
-        public UserViewHolder(View itemView) {
+        UserViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

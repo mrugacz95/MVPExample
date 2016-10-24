@@ -3,4 +3,10 @@
     <string name="avatar">Avatar</string>
     <string name="user">User</string>
     <string name="login">Login</string>
+    <string name="id">Id</string>
+    <string name="url">Url</string>
+    <string name="type">Type</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="location">Location</string>
 </resources>

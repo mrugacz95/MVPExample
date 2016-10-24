@@ -62,6 +62,16 @@ public class GitHubUser implements User {
     @SerializedName("site_admin")
     @Expose
     private Boolean siteAdmin;
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("location")
+    @Expose
+    private String location;
+
 
     /**
      *
@@ -373,5 +383,30 @@ public class GitHubUser implements User {
     public void setSiteAdmin(Boolean siteAdmin) {
         this.siteAdmin = siteAdmin;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
 }
