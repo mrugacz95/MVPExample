@@ -1,6 +1,5 @@
-package com.example.mrugas.example.modules;
+package com.example.mrugas.example.injection.modules;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.mrugas.example.events.ConnectionErrorEvent;
@@ -27,6 +26,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by mruga on 20.10.2016.
@@ -34,12 +34,12 @@ import retrofit2.http.GET;
 @Module
 public class RetrofitModule {
 
-    public static final String DALIYMOTION_URL = "https://api.dailymotion.com/";
-    public static final String GITHUB_URL = "https://api.github.com/";
+    private static final String DALIYMOTION_URL = "https://api.dailymotion.com/";
+    private static final String GITHUB_URL = "https://api.github.com/";
 
     @Provides
     @Singleton
-    public GitHubApi provideGitHubApi(Gson gson, OkHttpClient httpClient) {
+    GitHubApi provideGitHubApi(Gson gson, OkHttpClient httpClient) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GITHUB_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -49,7 +49,7 @@ public class RetrofitModule {
     }
     @Provides
     @Singleton
-    public DailyMotionApi provideDailyMotionApi(Gson gson, OkHttpClient httpClient){
+    DailyMotionApi provideDailyMotionApi(Gson gson, OkHttpClient httpClient){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DALIYMOTION_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -59,13 +59,13 @@ public class RetrofitModule {
     }
     @Provides
     @Singleton
-    public Gson provideGson(){
+    Gson provideGson(){
         return new GsonBuilder().disableHtmlEscaping()
                 .create();
     }
     @Provides
     @Singleton
-    public OkHttpClient provideHttpClient() {
+    OkHttpClient provideHttpClient() {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -96,7 +96,7 @@ public class RetrofitModule {
     }
     public interface DailyMotionApi{
         @GET("/users")
-        Call<DailyMotionUsersList> getUsers(@Field("fileds") String fileds);
+        Call<DailyMotionUsersList> getUsers(@Query("fields") String fields);
     }
 
 }

@@ -30,7 +30,7 @@ public class DailyMotionUsersList {
     private Boolean hasMore;
     @SerializedName("list")
     @Expose
-    private List<DailyMotionUsersList> list = new ArrayList<>();
+    private List<DailyMotionUser> list = new ArrayList<>();
 
     /**
      *
@@ -127,7 +127,7 @@ public class DailyMotionUsersList {
      * @return
      * The list
      */
-    public List<DailyMotionUsersList> getList() {
+    public List<DailyMotionUser> getList() {
         return list;
     }
 
@@ -136,7 +136,7 @@ public class DailyMotionUsersList {
      * @param list
      * The list
      */
-    public void setList(List<DailyMotionUsersList> list) {
+    public void setList(List<DailyMotionUser> list) {
         this.list = list;
     }
 

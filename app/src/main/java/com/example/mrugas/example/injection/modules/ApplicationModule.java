@@ -1,4 +1,4 @@
-package com.example.mrugas.example.modules;
+package com.example.mrugas.example.injection.modules;
 
 import android.app.Application;
 

@@ -9,7 +9,7 @@ import javax.annotation.Generated;
         import com.google.gson.annotations.SerializedName;
 
 @Generated("org.jsonschema2pojo")
-public class GitHubUser {
+public class GitHubUser implements User {
 
     @SerializedName("login")
     @Expose
@@ -97,6 +97,11 @@ public class GitHubUser {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
     }
 
     /**

@@ -2,10 +2,10 @@ package com.example.mrugas.example;
 
 import android.app.Application;
 
-import com.example.mrugas.example.components.DaggerNetComponent;
-import com.example.mrugas.example.components.NetComponent;
-import com.example.mrugas.example.modules.ApplicationModule;
-import com.example.mrugas.example.modules.RetrofitModule;
+import com.example.mrugas.example.injection.components.DaggerNetComponent;
+import com.example.mrugas.example.injection.components.NetComponent;
+import com.example.mrugas.example.injection.modules.ApplicationModule;
+import com.example.mrugas.example.injection.modules.RetrofitModule;
 
 /**
  * Created by mruga on 24.10.2016.

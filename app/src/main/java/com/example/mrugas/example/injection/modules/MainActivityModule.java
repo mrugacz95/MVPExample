@@ -1,7 +1,7 @@
-package com.example.mrugas.example.modules;
+package com.example.mrugas.example.injection.modules;
 
 import com.example.mrugas.example.activities.MainActivity;
-import com.example.mrugas.example.scopes.ActivityScope;
+import com.example.mrugas.example.injection.scopes.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;

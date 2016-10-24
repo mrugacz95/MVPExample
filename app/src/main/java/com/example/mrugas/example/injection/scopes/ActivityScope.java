@@ -1,4 +1,4 @@
-package com.example.mrugas.example.scopes;
+package com.example.mrugas.example.injection.scopes;
 
 import javax.inject.Scope;
 

@@ -10,7 +10,7 @@ import javax.annotation.Generated;
  */
 
 @Generated("org.jsonschema2pojo")
-public class DailyMotionUser {
+public class DailyMotionUser implements User {
 
         @SerializedName("avatar_360_url")
         @Expose
@@ -56,4 +56,8 @@ public class DailyMotionUser {
         }
 
 
+        @Override
+        public String getAvatarUrl() {
+                return avatar360Url;
+        }
 }

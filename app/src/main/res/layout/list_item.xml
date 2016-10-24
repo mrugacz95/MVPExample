@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
@@ -11,18 +12,22 @@
         card_view:cardCornerRadius="4dp">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView android:layout_width="50dp"
-                android:layout_height="50dp"
+            android:layout_height="match_parent">
+            <ImageView android:layout_width="match_parent"
+                android:layout_height="@dimen/avatar_height"
                 android:contentDescription="@string/avatar"
                 android:id="@+id/iv_avatar"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"
             />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/user"
-                android:layout_toRightOf="@id/iv_avatar"/>
+                android:id="@+id/tv_login"
+                android:padding="@dimen/login_padding"
+                android:layout_below="@id/iv_avatar"/>
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-</LinearLayout>
+</RelativeLayout>
