@@ -10,20 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mrugas.example.MyApp;
 import com.example.mrugas.example.R;
+import com.example.mrugas.example.activities.DetailsActivity;
 import com.example.mrugas.example.injection.modules.RetrofitModule;
+import com.example.mrugas.example.models.DailyMotionUser;
 import com.example.mrugas.example.models.GitHubUser;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,16 +31,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.mrugas.example.activities.DetailsActivity.DAILYMOTION;
+import static com.example.mrugas.example.activities.DetailsActivity.GITHUB;
+
 /**
  * Created by mruga on 24.10.2016.
  */
 @FragmentWithArgs
-public class GitHubUserFragment extends BaseFragment {
+public class UserFragment extends BaseFragment {
     @Inject
     RetrofitModule.GitHubApi gitHubApi;
+    @Inject
+    RetrofitModule.DailyMotionApi dailyMotionApi;
+    static final String FIELDS ="city,country,id,url,gender,avatar_360_url,created_time,username,status,twitter_url";
     @Arg
     public String user;
-    GitHubUser gitHubUser;
+    @Arg
+    public String type;
     @BindView(R.id.iv_avatar)
     ImageView ivAvatar;
     @BindView(R.id.tv_name)
@@ -71,36 +77,73 @@ public class GitHubUserFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        switch (type){
+            default:
+            case GITHUB:
+                getGitHubData();
+                break;
+            case DAILYMOTION:
+                getDailyMotionData();
+                break;
+        }
+    }
+    void getGitHubData(){
         Call<GitHubUser> gitHubCall = gitHubApi.getUser(user);
         gitHubCall.enqueue(new Callback<GitHubUser>() {
             @Override
             public void onResponse(Call<GitHubUser> call, Response<GitHubUser> response) {
                 if(response.body()!=null)
-                    gitHubUser = response.body();
-                    loadData();
+                    loadData(response.body());
             }
 
             @Override
             public void onFailure(Call<GitHubUser> call, Throwable t) {
-                    Log.d("Failure",t.getMessage());
-                    Snackbar.make(mainLayout, "Failure: " + t.getMessage(),Snackbar.LENGTH_LONG).show();
+                Log.d("Failure",t.getMessage());
+                Snackbar.make(mainLayout, "Failure: " + t.getMessage(),Snackbar.LENGTH_LONG).show();
             }
         });
     }
-    private void loadData(){
-        Glide.with(mContext).load(gitHubUser.getAvatarUrl()).into(ivAvatar);
-        tvEmail.setText(gitHubUser.getEmail());
-        tvId.setText(String.valueOf(gitHubUser.getId()));
-        tvLocation.setText(gitHubUser.getLocation());
-        tvName.setText(gitHubUser.getName());
-        tvLogin.setText(gitHubUser.getUsername());
-        tvUrl.setText( Html.fromHtml("<a href=\""+gitHubUser.getHtmlUrl()+"\">"+gitHubUser.getHtmlUrl()+"</a>"));
+    void getDailyMotionData(){
+        Call<DailyMotionUser> gitHubCall = dailyMotionApi.getUser(user,FIELDS);
+        gitHubCall.enqueue(new Callback<DailyMotionUser>() {
+            @Override
+            public void onResponse(Call<DailyMotionUser> call, Response<DailyMotionUser> response) {
+                if(response.body()!=null)
+                    loadData(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<DailyMotionUser> call, Throwable t) {
+                Log.d("Failure",t.getMessage());
+                Snackbar.make(mainLayout, "Failure: " + t.getMessage(),Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+    private void loadData(GitHubUser user){
+        Glide.with(mContext).load(user.getAvatarUrl()).into(ivAvatar);
+        tvEmail.setText(user.getEmail());
+        tvId.setText(String.valueOf(user.getId()));
+        tvLocation.setText(user.getLocation());
+        tvName.setText(user.getName());
+        tvLogin.setText(user.getUsername());
+        tvUrl.setText( Html.fromHtml("<a href=\""+user.getHtmlUrl()+"\">"+user.getHtmlUrl()+"</a>"));
         tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
-        tvType.setText(gitHubUser.getType());
+        tvType.setText(user.getType());
+    }
+    private void loadData(DailyMotionUser user){
+        Glide.with(mContext).load(user.getAvatarUrl()).into(ivAvatar);
+        tvEmail.setText(Html.fromHtml("<a href=\""+user.getTwitterUrl()+"\">"+user.getTwitterUrl()+"</a>"));
+        tvId.setText(user.getId());
+        tvLocation.setText(user.getCity());
+        tvName.setText(user.getUsername());
+        tvLogin.setText(user.getUsername());
+        tvUrl.setText( Html.fromHtml("<a href=\""+user.getUrl()+"\">"+user.getUrl()+"</a>"));
+        tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
+        tvType.setText(user.getStatus());
     }
     @Override
     protected int getLayoutRes() {
-        return R.layout.fragment_github_user;
+        return R.layout.fragment_user;
     }
 
     @Override

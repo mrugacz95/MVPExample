@@ -9,9 +9,8 @@ import android.view.MenuItem;
 
 import com.example.mrugas.example.R;
 import com.example.mrugas.example.fragments.BaseFragment;
-import com.example.mrugas.example.fragments.GitHubUserFragment;
-import com.example.mrugas.example.fragments.GitHubUserFragmentBuilder;
 import com.example.mrugas.example.fragments.MainFragment;
+import com.example.mrugas.example.fragments.UserFragmentBuilder;
 
 /**
  * Created by mruga on 24.10.2016.
@@ -29,12 +28,7 @@ public class DetailsActivity extends AppCompatActivity {
         Fragment mainFragment = new MainFragment();
         String user = getIntent().getStringExtra(USER);
         String type = getIntent().getStringExtra(TYPE);
-        BaseFragment fragment;
-        switch (type){
-            default:
-            case GITHUB:
-                fragment = new GitHubUserFragmentBuilder(user).build();
-        }
+        BaseFragment fragment = new UserFragmentBuilder(type,user).build();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         ActionBar actionBar = getSupportActionBar();
         if(actionBar!=null)

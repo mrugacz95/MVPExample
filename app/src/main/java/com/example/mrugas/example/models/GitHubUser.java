@@ -71,6 +71,17 @@ public class GitHubUser implements User {
     @SerializedName("location")
     @Expose
     private String location;
+    @SerializedName("created_at")
+    @Expose
+    private String createdAt;
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
 
     /**

@@ -1,7 +1,6 @@
 package com.example.mrugas.example.injection.components;
 
-import com.example.mrugas.example.fragments.BaseFragment;
-import com.example.mrugas.example.fragments.GitHubUserFragment;
+import com.example.mrugas.example.fragments.UserFragment;
 import com.example.mrugas.example.fragments.MainFragment;
 import com.example.mrugas.example.injection.modules.ApplicationModule;
 import com.example.mrugas.example.injection.modules.RetrofitModule;
@@ -18,5 +17,5 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class, RetrofitModule.class})
 public interface NetComponent {
     void inject(MainFragment fragment);
-    void inject(GitHubUserFragment fragment);
+    void inject(UserFragment fragment);
 }

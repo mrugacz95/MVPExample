@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.mrugas.example.MyApp;
 import com.example.mrugas.example.R;
@@ -45,6 +47,8 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     RecyclerView recyclerView;
     @BindView(R.id.swiperefresh)
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.main_container)
+    RelativeLayout mainContainer;
     @Inject
     RetrofitModule.GitHubApi gitHubApi;
     @Inject
@@ -74,14 +78,17 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             public void onResponse(Call<List<GitHubUser>> call, Response<List<GitHubUser>> response) {
                 if (response.body() != null)
                     ((UserAdapter) recyclerView.getAdapter()).addUsers(response.body());
-                else
+                else {
                     Log.d("Error", response.errorBody().toString());
+                    Snackbar.make(mainContainer, "DailyMotion failed: " + response.errorBody().toString(), Snackbar.LENGTH_LONG).show();
+                }
                 gitHubReady = true;
                 stopRefreshing();
             }
 
             @Override
             public void onFailure(Call<List<GitHubUser>> call, Throwable t) {
+                Snackbar.make(mainContainer,"GitHub failed: "+t.getMessage(),Snackbar.LENGTH_LONG).show();
 
             }
         });
@@ -99,7 +106,7 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
             @Override
             public void onFailure(Call<DailyMotionUsersList> call, Throwable t) {
-
+                Snackbar.make(mainContainer,"DailyMotion failed: "+t.getMessage(),Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -138,9 +145,15 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             int position = parent.getChildAdapterPosition(view);
-            int column = position % 2+1;
-            outRect.left = spacing / column;
-            outRect.right = spacing / (column+1)%2;
+            int column = position % 2;
+            if(column==0) {
+                outRect.left = spacing;
+                outRect.right = spacing / 2;
+            }
+            else {
+                outRect.left = spacing /2;
+                outRect.right = spacing;
+            }
             if (position < spanCount) {
                 outRect.top = spacing;
             }

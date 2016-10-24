@@ -3,6 +3,7 @@ package com.example.mrugas.example.injection.modules;
 import android.util.Log;
 
 import com.example.mrugas.example.events.ConnectionErrorEvent;
+import com.example.mrugas.example.models.DailyMotionUser;
 import com.example.mrugas.example.models.DailyMotionUsersList;
 import com.example.mrugas.example.models.GitHubUser;
 import com.google.gson.Gson;
@@ -100,6 +101,9 @@ public class RetrofitModule {
     public interface DailyMotionApi{
         @GET("/users")
         Call<DailyMotionUsersList> getUsers(@Query("fields") String fields);
+        @GET("/user/{user}")
+        Call<DailyMotionUser> getUser(@Path("user") String user,
+                                      @Query("fields") String fields);
     }
 
 }
