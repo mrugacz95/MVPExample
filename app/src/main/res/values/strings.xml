@@ -10,4 +10,6 @@
     <string name="email">Email</string>
     <string name="location">Location</string>
     <string name="contact">Contact</string>
+    <string name="no_connection">No connection - retry</string>
+    <string name="no_data">No data</string>
 </resources>

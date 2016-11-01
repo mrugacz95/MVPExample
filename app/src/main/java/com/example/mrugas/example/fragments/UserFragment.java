@@ -50,8 +50,6 @@ public class UserFragment extends BaseFragment {
     public String type;
     @BindView(R.id.iv_avatar)
     ImageView ivAvatar;
-    @BindView(R.id.tv_name)
-    TextView tvName;
     @BindView(R.id.tv_email)
     TextView tvEmail;
     @BindView(R.id.tv_location)
@@ -123,21 +121,36 @@ public class UserFragment extends BaseFragment {
         Glide.with(mContext).load(user.getAvatarUrl()).into(ivAvatar);
         tvEmail.setText(user.getEmail());
         tvId.setText(String.valueOf(user.getId()));
-        tvLocation.setText(user.getLocation());
-        tvName.setText(user.getName());
+        if(user.getLocation().isEmpty() || user.getLocation().equals(""))
+            tvLocation.setText(mContext.getString(R.string.no_data));
+        else
+            tvLocation.setText(user.getLocation());
         tvLogin.setText(user.getUsername());
-        tvUrl.setText( Html.fromHtml("<a href=\""+user.getHtmlUrl()+"\">"+user.getHtmlUrl()+"</a>"));
-        tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
+        if(user.getHtmlUrl()==null || user.getHtmlUrl().equals("null"))
+            tvUrl.setText(mContext.getString(R.string.no_data));
+        else {
+            tvUrl.setText(Html.fromHtml("<a href=\"" + user.getHtmlUrl() + "\">" + user.getHtmlUrl() + "</a>"));
+            tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
+        }
         tvType.setText(user.getType());
     }
     private void loadData(DailyMotionUser user){
         Glide.with(mContext).load(user.getAvatarUrl()).into(ivAvatar);
-        tvEmail.setText(Html.fromHtml("<a href=\""+user.getTwitterUrl()+"\">"+user.getTwitterUrl()+"</a>"));
+        if(user.getUrl()==null || user.getUrl().equals("null")) {
+            tvEmail.setText(Html.fromHtml("<a href=\"" + user.getTwitterUrl() + "\">" + user.getTwitterUrl() + "</a>"));
+            tvEmail.setMovementMethod(LinkMovementMethod.getInstance());
+        }
+        else {
+            tvEmail.setText(mContext.getString(R.string.no_data));
+        }
         tvId.setText(user.getId());
-        tvLocation.setText(user.getCity());
-        tvName.setText(user.getUsername());
+        if(user.getCity().isEmpty() || user.getCity().equals(""))
+            tvLocation.setText(mContext.getString(R.string.no_data));
+        else
+            tvLocation.setText(user.getCity());
         tvLogin.setText(user.getUsername());
-        tvUrl.setText( Html.fromHtml("<a href=\""+user.getUrl()+"\">"+user.getUrl()+"</a>"));
+        tvUrl.setText(mContext.getString(R.string.no_data));
+        tvUrl.setText(Html.fromHtml("<a href=\"" + user.getUrl() + "\">" + user.getUrl() + "</a>"));
         tvUrl.setMovementMethod(LinkMovementMethod.getInstance());
         tvType.setText(user.getStatus());
     }

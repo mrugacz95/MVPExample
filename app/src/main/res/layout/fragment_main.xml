@@ -8,9 +8,21 @@
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rv_data"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_connection"
+            android:background="@android:color/transparent"
+            android:id="@+id/bt_no_connection"
+            android:visibility="gone"
+            />
+        </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

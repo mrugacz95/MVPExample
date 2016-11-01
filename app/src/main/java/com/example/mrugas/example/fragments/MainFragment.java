@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.mrugas.example.MyApp;
@@ -33,6 +36,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +53,8 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.main_container)
     RelativeLayout mainContainer;
+    @BindView(R.id.bt_no_connection)
+    Button noConnection;
     @Inject
     RetrofitModule.GitHubApi gitHubApi;
     @Inject
@@ -70,8 +76,19 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout.setOnRefreshListener(this);
 
     }
+    @OnClick(R.id.bt_no_connection)
+    public void getData() {
+        if(!isOnline()) {
+            noConnection.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setRefreshing(false);
+            recyclerView.setVisibility(View.GONE);
+            return;
+        }
+        noConnection.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(true);
 
-    private void getData() {
+
         Call<List<GitHubUser>> call = gitHubApi.getUsers();
         call.enqueue(new Callback<List<GitHubUser>>() {
             @Override
@@ -165,5 +182,11 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

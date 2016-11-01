@@ -9,12 +9,12 @@
     <com.jorgecastilloprz.expandablepanel.ExpandablePanelView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        expandablepanel:completionPercent="0.5"
+        expandablepanel:completionPercent="0.95"
         expandablepanel:completeExpandAnimationSpeed="150"
         expandablepanel:completeShrinkAnimationSpeed="200">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="220dp"
         android:src="@mipmap/ic_launcher"
         android:scaleType="centerCrop"
         android:contentDescription="@string/avatar"
@@ -39,18 +39,6 @@
             tools:text="mojombo"
             android:textAppearance="@android:style/TextAppearance.Medium"
             android:id="@+id/tv_login"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/name"
-            android:textAppearance="@android:style/TextAppearance.Small"
-            android:layout_marginTop="5dp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Tom Preston-Werner"
-            android:textAppearance="@android:style/TextAppearance.Medium"
-            android:id="@+id/tv_name"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,9 +84,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="https://api.github.com/users/mojombo"
+            tools:text="https://api.github.com/users/1234333332-mojombo/"
             android:textAppearance="@android:style/TextAppearance.Medium"
-            android:id="@+id/tv_url"/>
+            android:id="@+id/tv_url"
+            android:lines="1"
+            android:scrollHorizontally="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
