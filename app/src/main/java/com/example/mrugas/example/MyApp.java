@@ -2,6 +2,8 @@ package com.example.mrugas.example;
 
 import android.app.Application;
 
+import com.example.mrugas.example.injection.components.ApplicationComponent;
+import com.example.mrugas.example.injection.components.DaggerApplicationComponent;
 import com.example.mrugas.example.injection.components.DaggerNetComponent;
 import com.example.mrugas.example.injection.components.NetComponent;
 import com.example.mrugas.example.injection.modules.ApplicationModule;
@@ -14,25 +16,33 @@ import com.example.mrugas.example.injection.modules.RetrofitModule;
 public class MyApp extends Application {
 
     private NetComponent mNetComponent;
+    private ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        initNetComponent();
+        initAppComponent();
 
 
-        // Dagger%COMPONENT_NAME%
+
+    }
+    private void initNetComponent(){
         mNetComponent = DaggerNetComponent.builder()
-                // list of modules that are part of this component need to be created here too
-                .applicationModule(new ApplicationModule(this)) // This also corresponds to the name of your module: %component_name%Module
+                .applicationModule(new ApplicationModule(this))
                 .retrofitModule(new RetrofitModule())
                 .build();
-
-        // If a Dagger 2 component does not have any constructor arguments for any of its modules,
-        // then we can use .create() as a shortcut instead:
-        //  mNetComponent = com.codepath.dagger.components.DaggerNetComponent.create();
     }
-
+    private void initAppComponent(){
+        mApplicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+    }
     public NetComponent getNetComponent() {
         return mNetComponent;
+    }
+
+    public ApplicationComponent getmApplicationComponent() {
+        return mApplicationComponent;
     }
 }

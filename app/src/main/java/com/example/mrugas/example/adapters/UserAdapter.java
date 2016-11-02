@@ -14,8 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.mrugas.example.R;
-import com.example.mrugas.example.activities.DetailsActivity;
-import com.example.mrugas.example.models.DailyMotionUser;
+import com.example.mrugas.example.activities.UserActivity;
 import com.example.mrugas.example.models.GitHubUser;
 import com.example.mrugas.example.models.User;
 
@@ -25,10 +24,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.mrugas.example.activities.DetailsActivity.DAILYMOTION;
-import static com.example.mrugas.example.activities.DetailsActivity.GITHUB;
-import static com.example.mrugas.example.activities.DetailsActivity.TYPE;
-import static com.example.mrugas.example.activities.DetailsActivity.USER;
+import static com.example.mrugas.example.activities.UserActivity.DAILYMOTION;
+import static com.example.mrugas.example.activities.UserActivity.GITHUB;
+import static com.example.mrugas.example.activities.UserActivity.TYPE;
+import static com.example.mrugas.example.activities.UserActivity.USER;
 
 /**
  * Created by mruga on 24.10.2016.
@@ -59,7 +58,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, DetailsActivity.class);
+                Intent intent = new Intent(mContext, UserActivity.class);
                 Bundle bundle = new Bundle();
                 intent.putExtra(USER, user.getUsername());
                 if(user instanceof GitHubUser)

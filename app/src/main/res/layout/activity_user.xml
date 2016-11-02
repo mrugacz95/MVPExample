@@ -4,17 +4,10 @@
     android:layout_height="match_parent"
     android:id="@+id/main"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:expandablepanel="http://schemas.android.com/apk/res-auto">
-    <com.jorgecastilloprz.expandablepanel.ExpandablePanelView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        expandablepanel:completionPercent="0.95"
-        expandablepanel:completeExpandAnimationSpeed="150"
-        expandablepanel:completeShrinkAnimationSpeed="200">
+    xmlns:tools="http://schemas.android.com/tools">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="180dp"
         android:src="@mipmap/ic_launcher"
         android:scaleType="centerCrop"
         android:contentDescription="@string/avatar"
@@ -103,5 +96,4 @@
             android:id="@+id/tv_type"/>
     </LinearLayout>
         </ScrollView>
-    </com.jorgecastilloprz.expandablepanel.ExpandablePanelView>
 </RelativeLayout>
