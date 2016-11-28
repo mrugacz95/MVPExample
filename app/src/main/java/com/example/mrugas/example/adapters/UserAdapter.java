@@ -53,13 +53,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
         final User user = (firstList.size()>0 && position< firstList.size())? firstList.get(position) : secondList.get(position- firstList.size());
+
         holder.tvLogin.setText(user.getUsername());
         Glide.with(mContext).load(user.getAvatarUrl()).into(holder.ivAvatar);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, UserActivity.class);
-                Bundle bundle = new Bundle();
                 intent.putExtra(USER, user.getUsername());
                 if(user instanceof GitHubUser)
                     intent.putExtra(TYPE, GITHUB);
@@ -78,8 +78,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public int getItemCount() {
-        return firstList.size()+ secondList.size();
+        return firstList.size() + secondList.size();
     }
+
     public void addUsers(List<? extends User> usersList){
         if(firstList.isEmpty())
             firstList = usersList;
@@ -87,7 +88,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             secondList = usersList;
         notifyDataSetChanged();
     }
-
+//
     public void clear() {
         firstList.clear();
         secondList.clear();

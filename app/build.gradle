@@ -49,6 +49,10 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.hannesdorfmann.fragmentargs:annotation:3.0.2'
     apt 'com.hannesdorfmann.fragmentargs:processor:3.0.2'
-    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:design:25.0.1'
     compile 'com.github.jorgecastilloprz:expandablepanel:1.0.4@aar'
+    //rxJava
+    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
 }

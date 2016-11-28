@@ -31,6 +31,7 @@ import com.example.mrugas.example.injection.modules.RetrofitModule;
 import com.example.mrugas.example.models.User;
 
 import java.util.List;
+import java.util.Observable;
 
 import javax.inject.Inject;
 
@@ -40,6 +41,9 @@ import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by mruga on 24.10.2016.
@@ -89,43 +93,51 @@ public class MainFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         swipeRefreshLayout.setRefreshing(true);
 
 
-        Call<List<GitHubUser>> call = gitHubApi.getUsers();
-        call.enqueue(new Callback<List<GitHubUser>>() {
-            @Override
-            public void onResponse(Call<List<GitHubUser>> call, Response<List<GitHubUser>> response) {
-                if (response.body() != null)
-                    ((UserAdapter) recyclerView.getAdapter()).addUsers(response.body());
-                else {
-                    Log.d("Error", response.errorBody().toString());
-                    Snackbar.make(mainContainer, "DailyMotion failed: " + response.errorBody().toString(), Snackbar.LENGTH_LONG).show();
-                }
-                gitHubReady = true;
-                stopRefreshing();
-            }
+        gitHubApi.getUsers()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<GitHubUser>>(){
 
-            @Override
-            public void onFailure(Call<List<GitHubUser>> call, Throwable t) {
-                Snackbar.make(mainContainer,"GitHub failed: "+t.getMessage(),Snackbar.LENGTH_LONG).show();
+                    @Override
+                    public void onCompleted() {
+                        gitHubReady = true;
+                        stopRefreshing();
+                    }
 
-            }
-        });
-        final Call<DailyMotionUsersList> dailyMotionCall = dailyMotionApi.getUsers("avatar_360_url,username");
-        dailyMotionCall.enqueue(new Callback<DailyMotionUsersList>() {
-            @Override
-            public void onResponse(Call<DailyMotionUsersList> call, Response<DailyMotionUsersList> response) {
-                if (response.body() != null)
-                    ((UserAdapter) recyclerView.getAdapter()).addUsers(response.body().getList());
-                else
-                    Log.d("Error", response.errorBody().toString());
-                dailyMotionReady = true;
-                stopRefreshing();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        gitHubReady = true;
+                        stopRefreshing();
+                        Snackbar.make(mainContainer,"GitHub failed: "+e.getMessage(),Snackbar.LENGTH_LONG).show();
+                    }
 
-            @Override
-            public void onFailure(Call<DailyMotionUsersList> call, Throwable t) {
-                Snackbar.make(mainContainer,"DailyMotion failed: "+t.getMessage(),Snackbar.LENGTH_LONG).show();
-            }
-        });
+                    @Override
+                    public void onNext(List<GitHubUser> users) {
+                        ((UserAdapter) recyclerView.getAdapter()).addUsers(users);
+                    }
+                });
+            dailyMotionApi.getUsers("avatar_360_url,username")
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<DailyMotionUsersList>() {
+                        @Override
+                        public void onCompleted() {
+                            dailyMotionReady = true;
+                            stopRefreshing();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Snackbar.make(mainContainer,"DailyMotion failed: "+e.getMessage(),Snackbar.LENGTH_LONG).show();
+                            dailyMotionReady = true;
+                            stopRefreshing();
+                        }
+
+                        @Override
+                        public void onNext(DailyMotionUsersList dailyMotionUsersList) {
+                        ((UserAdapter) recyclerView.getAdapter()).addUsers(dailyMotionUsersList.getList());
+                        }
+                    });
     }
 
     private void stopRefreshing() {

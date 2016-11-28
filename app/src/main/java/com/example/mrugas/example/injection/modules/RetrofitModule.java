@@ -24,11 +24,13 @@ import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by mruga on 20.10.2016.
@@ -45,6 +47,7 @@ public class RetrofitModule {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GITHUB_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(httpClient)
                 .build();
         return retrofit.create(GitHubApi.class);
@@ -55,6 +58,7 @@ public class RetrofitModule {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DALIYMOTION_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(httpClient)
                 .build();
         return retrofit.create(DailyMotionApi.class);
@@ -94,13 +98,13 @@ public class RetrofitModule {
 
     public interface GitHubApi {
         @GET("/users")
-        Call<List<GitHubUser>> getUsers();
+        Observable<List<GitHubUser>> getUsers();
         @GET("/users/{user}")
         Call<GitHubUser> getUser(@Path("user") String user);
     }
     public interface DailyMotionApi{
         @GET("/users")
-        Call<DailyMotionUsersList> getUsers(@Query("fields") String fields);
+        Observable<DailyMotionUsersList> getUsers(@Query("fields") String fields);
         @GET("/user/{user}")
         Call<DailyMotionUser> getUser(@Path("user") String user,
                                       @Query("fields") String fields);
